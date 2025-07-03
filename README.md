@@ -10,7 +10,7 @@ __Time to complete:__ Around 4-6 hours
 
 In this tutorial, we’ll create a small IoT device to monitor your plant’s health. This includes reading the _soil moisture, sun exposure, room temperature, and humidity_.  
 
-The data gathered is presented using a self-hosted solution. A _TIG stack (Telegraf, InfluxDB, and Grafana)_ is used to store and visualize the data, all running inside a Docker container.  
+The data gathered is presented using a self-hosted solution. A _TIG stack (Telegraf, InfluxDB, and Grafana)_ is used to store and visualize the data, all running inside Docker containers.  
 
 Depending on your prior experience, this project should be fairly straightforward and should not take longer than a few hours to complete.  
 
@@ -262,7 +262,7 @@ If you prefer this route, you can follow these [beginner guides](https://learn.a
 
 While Adafruit IO was a good and simple solution, I wanted to have more freedom to customize the dashboard, better actions and the ability to scale the project without having to pay a subscription fee. I also found this to be a good opportunity to work with Docker for the first time.
 
-Therefor a TIG stack (Telegraf, InfluxDB, Grafana) along with Mosquitto MQTT was used inside a Docker container. For now, this only runs locally on my machine, but since it’s containerized, it could be installed on a separate server as a more long-term solution.
+Therefor a TIG stack (Telegraf, InfluxDB, Grafana) along with Mosquitto MQTT was used running inside a Docker containers and using Docker-compose to manage them. For now, this only runs locally on my machine, but since it’s containerized, it could be installed on a separate server as a more long-term solution.
 
 The stack:
 
@@ -512,7 +512,7 @@ _Note: If the connection fails, the red LED will flash 5 times._
 
 To send the data to the database, the MQTT protocol is used. MQTT is a lightweight messaging protocol that is perfect for IoT devices because it is power-efficient and relatively simple to set up.
 
-Using the MQTT library from PyCom, a connection is established to the MQTT broker. In this case, that’s Mosquitto, which runs in the local Docker container, but it could also be Adafruit IO, for example. The connection uses the credentials stored in `config.py`.
+Using the MQTT library from PyCom, a connection is established to the MQTT broker, in my case Mosquitto, but it could also be Adafruit IO, for example. The connection uses the credentials stored in `config.py`.
 
 ```
 # Client connection
@@ -598,7 +598,7 @@ __A thirsty plant:__
 
 To improve this project further, it would be fun to 3D-print a case and solder the connections to make it more production-ready. Sadly, I don’t have a 3D printer or a soldering iron at the moment, so that isn’t possible right now.
 
-The server is also running locally on my main MacBook, which is not ideal since it can’t stay online at all times. Investing in a Raspberry Pi or running the server on an old computer would be an improvement to the current solution. However, since everything runs in a Docker container, migrating it later should be fairly easy.
+The server is also running locally on my main MacBook, which is not ideal since it can’t stay online at all times. Investing in a Raspberry Pi or running the server on an old computer would be an improvement to the current solution. However, since everything runs in a Docker containers and managed with Docker-Compose, migrating it later should be fairly easy.
 
 Another improvement would be to enable a way to dynamically change the moisture threshold. This could be done either via a front end where the Pico retrieves the value or with a physical dial on the device itself.
 
