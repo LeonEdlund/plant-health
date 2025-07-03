@@ -1,0 +1,71 @@
+#version: '3.9'
+
+networks:
+  tig-net:
+    driver: bridge
+
+volumes:
+  influxdb-data:
+  grafana-data:
+
+
+services:
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - 8086:8086
+    networks:
+      - tig-net
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment:
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_ADMIN_USER}" # Replace this before starting the containers
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}" # Replace this before starting the containers 
+    networks:
+      - tig-net
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: always
+
+  telegraf:
+    image: telegraf:latest
+    depends_on:
+      - "influxdb"
+      - "mosquitto"
+    environment:
+      HOST_NAME: "telegraf"
+      INFLUXDB_HOST: "influxdb"
+      INFLUXDB_PORT: "8086"
+      MOSQUITTO_TOPIC: "${MOSQUITTO_TOPIC}"
+      MOSQUITTO_USERNAME: "${MOSQUITTO_USERNAME}"
+      MOSQUITTO_PASSWORD: "${MOSQUITTO_PASSWORD}"
+      INFLUXDB_TOKEN: "${INFLUXDB_TOKEN}"
+      INFLUXDB_ORG: "${INFLUXDB_ORG}"
+      INFLUXDB_BUCKET: "${INFLUXDB_BUCKET}"
+      TELEGRAF_INTERVAL: "${TELEGRAF_INTERVAL}"
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+    tty: true
+    networks:
+      - tig-net
+    privileged: true
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    ports:
+      - "1883:1883" # MQTT port
+      - "9001:9001" # WebSocket port
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - tig-net
