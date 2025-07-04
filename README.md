@@ -239,7 +239,7 @@ _Note: This setup is meant for development. To tidy up the project and make it p
 As seen in the diagram, three sensors and one LED are used:
 
 1. __Soil moisture sensor:__  
-   To read the data from this sensor (_bottom right_), it is connected to one of the ADC pins (GP27) on the Pico. This allows us to convert the analog signal from the sensor into a digital value we can use in our code. To power the sensor, it is connected to its own GPIO pin (GP16). This allows us to independently turn the sensor on and off while taking a measurement. Ground is connected to the Pico’s GND pin, which is linked to the ground rail on the breadboard.
+   To read the data from this sensor (_bottom right_), it is connected to one of the ADC pins (GP27) on the Pico. This allows us to convert the analog signal from the sensor into a digital value we can use in our code. To power the sensor, it is connected to its own GPIO pin (GP16). This allows us to independently turn the sensor on and off while taking a measurement. Ground is connected to the Pico’s GND pin, which is connected to the ground rail on the breadboard.
 
 2. __Temperature and humidity sensor:__  
    This sensor (DHT11 — _far left_) is connected to GP26 for reading data. It is powered by the 3.3V pin via the power rail, and ground is connected to the ground rail.
@@ -272,7 +272,7 @@ The stack:
 
 3. __InfluxDB__: A time-series database used to store the data from the device.
 
-4. __Grafana__: An open-source data visualization tool used to create dashboards and display the data stored in InfluxDB.
+4. __Grafana__: An open-source data visualization tool used to create a dashboard and display the data stored in InfluxDB.
 
 To set up the same Docker config as me see `README.md` in `/docker-tig-stack` 
 
@@ -280,7 +280,7 @@ To set up the same Docker config as me see `README.md` in `/docker-tig-stack`
 
 ### Get up and running
 
-The code for the Pico (`pico-code`) is pretty straightforward. To get started, all you have to do is adjust the `config.py` file with your Wi-Fi and MQTT credentials. If you want to, you can also set the threshold for when the LED should turn on based on the soil moisture level, as well as how often the device should take measurements.
+The code for the Pico (`/pico-code`) is pretty straightforward. To get started, all you have to do is adjust the `config.py` file with your Wi-Fi and MQTT credentials. If you want to, you can also set the threshold for when the LED should turn on based on the soil moisture level, as well as how often the device should take measurements.
 
 ```
 # Wi-Fi
@@ -545,7 +545,7 @@ It is now possible to display this data in Grafana!
 
 ## Presenting the data
 
-I used InfluxDB as the database since it is a time-series database designed to store timestamped data—perfect for visualizing measurements that change over time. It also integrates well with Grafana, since Grafana offers a built-in InfluxDB plugin that makes it easy to connect and query the database.
+I used InfluxDB as the database since it is a time-series database designed to store timestamped data, perfect for visualizing measurements that change over time. It also integrates well with Grafana, since Grafana offers a built-in InfluxDB plugin that makes it easy to connect and query the database.
 
 Telegraf is configured to check for new messages every 15 seconds, the same rate that the device publishes data. This interval can be adjusted in the `.env` file located in `/docker-tig-stack`.
 
@@ -576,7 +576,7 @@ The query filters the data in InfluxDB by field. By changing `"moisture"` to the
 
 To notify me when I’m not home to see the LED, I set up a trigger in Grafana that sends a message to a Discord server using the webhook functionality. The message is sent when the latest soil moisture reading in the database is below 30%, the same threshold used to turn on the LED.
 
-![Discord message](/assets/trigger.png)
+![Discord message](/assets/discord-message.png)
 
 If you’re interested in setting this up yourself, you can follow [this tutorial](https://grafana.com/docs/grafana/latest/alerting/configure-notifications/manage-contact-points/integrations/configure-discord/).
 
