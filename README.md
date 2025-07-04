@@ -8,9 +8,9 @@ __Time to complete:__ Around 4-6 hours
 
 ---
 
-In this tutorial, we’ll create a small IoT device to monitor your plant’s health. This includes reading the _soil moisture, sun exposure, room temperature, and humidity_.  
+This project shows how you can create a small IoT device to monitor your plant’s health. This includes reading the _soil moisture, sun exposure, room temperature and humidity_.  
 
-The data gathered is presented using a self-hosted solution. A _TIG stack (Telegraf, InfluxDB, and Grafana)_ is used to store and visualize the data, all running inside Docker containers.  
+The data gathered is presented using a self-hosted solution and _Telegraf, InfluxDB, and Grafana (TIG Stack)_ is used to store and visualize the data, all running inside Docker containers.  
 
 Depending on your prior experience, this project should be fairly straightforward and should not take longer than a few hours to complete.  
 
